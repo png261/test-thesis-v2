@@ -16,6 +16,8 @@ resource "aws_security_group" "chapter4_demo" {
   description = "Chapter 4 drift demo: expected no inbound SSH from the internet"
   vpc_id      = aws_vpc.chapter4_demo.id
 
+  # Keep ingress managed inline so Terraform plans removal of any unmanaged
+  # inbound rules discovered during refresh, including broad admin access drift.
   ingress = []
 
   egress {
