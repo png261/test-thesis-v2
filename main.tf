@@ -16,6 +16,8 @@ resource "aws_security_group" "chapter4_demo" {
   description = "Chapter 4 drift demo: expected no inbound SSH from the internet"
   vpc_id      = aws_vpc.chapter4_demo.id
 
+  revoke_rules_on_delete = true
+
   ingress = []
 
   egress {
