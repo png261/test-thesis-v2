@@ -16,7 +16,11 @@ resource "aws_security_group" "chapter4_demo" {
   description = "Chapter 4 drift demo: expected no inbound SSH from the internet"
   vpc_id      = aws_vpc.chapter4_demo.id
 
+  # Keep ingress managed as an explicit empty set so Terraform plans removal of
+  # out-of-band inbound rules, including the drifted public SSH rule.
   ingress = []
+
+  revoke_rules_on_delete = true
 
   egress {
     description = "Allow outbound HTTPS for normal managed baseline"
