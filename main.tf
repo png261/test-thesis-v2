@@ -12,11 +12,14 @@ resource "aws_vpc" "chapter4_demo" {
 }
 
 resource "aws_security_group" "chapter4_demo" {
-  name        = "chapter4-drift-demo-${var.test_id}"
-  description = "Chapter 4 drift demo: expected no inbound SSH from the internet"
-  vpc_id      = aws_vpc.chapter4_demo.id
+  name                   = "chapter4-drift-demo-${var.test_id}"
+  description            = "Chapter 4 drift demo: expected no inbound SSH from the internet"
+  vpc_id                 = aws_vpc.chapter4_demo.id
+  revoke_rules_on_delete = true
 
-  ingress = []
+  # Manage the ingress rule set inline so Terraform reconciles drifted rules.
+  # This intentionally declares no ingress blocks; any out-of-band ingress rule
+  # such as tcp/22 from 0.0.0.0/0 will be planned for removal.
 
   egress {
     description = "Allow outbound HTTPS for normal managed baseline"
