@@ -12,10 +12,13 @@ resource "aws_vpc" "chapter4_demo" {
 }
 
 resource "aws_security_group" "chapter4_demo" {
-  name        = "chapter4-drift-demo-${var.test_id}"
-  description = "Chapter 4 drift demo: expected no inbound SSH from the internet"
-  vpc_id      = aws_vpc.chapter4_demo.id
+  name                   = "chapter4-drift-demo-${var.test_id}"
+  description            = "Chapter 4 drift demo: expected no inbound SSH from the internet"
+  vpc_id                 = aws_vpc.chapter4_demo.id
+  revoke_rules_on_delete = true
 
+  # Keep the managed baseline closed to inbound traffic. This ensures drifted
+  # public TCP/20-25 access, including SSH on TCP/22, is removed by Terraform.
   ingress = []
 
   egress {
